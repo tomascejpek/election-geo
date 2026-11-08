@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "election-geo"
+version = "0.1.0"
+description = "The boundaries of the Czech units of the elections (regions, districts, senate constituencies, municipalities, wards, parts of the cities) as GeoJSON, packaged as Django static files."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Tomáš Cejpek" }]
+requires-python = ">=3.10"
+dependencies = []
+classifiers = [
+    "Framework :: Django",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+
+[project.urls]
+Homepage = "https://github.com/tomascejpek/election-geo"
+
+[tool.setuptools]
+packages = ["election_geo"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+election_geo = ["static/election/geo/*.geojson", "static/election/geo/*.json",
+                "static/election/geo/parts/*.geojson", "static/election/geo/wards/*.geojson"]
