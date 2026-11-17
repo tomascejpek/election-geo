@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "election-geo"
-version = "0.1.0"
-description = "The boundaries of the Czech units of the elections (regions, districts, senate constituencies, municipalities, wards, parts of the cities) as GeoJSON, packaged as Django static files."
+version = "0.2.0"
+description = "The boundaries of the Czech units of the elections (regions, districts, senate constituencies, municipalities, wards, parts of the cities) and of the countries of the world as GeoJSON, packaged as Django static files."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
@@ -27,4 +27,5 @@ include-package-data = true
 
 [tool.setuptools.package-data]
 election_geo = ["static/election/geo/*.geojson", "static/election/geo/*.json",
-                "static/election/geo/parts/*.geojson", "static/election/geo/wards/*.geojson"]
+                "static/election/geo/parts/*.geojson", "static/election/geo/wards/*.geojson",
+                "static/election/geo/world/*.geojson", "static/election/geo/world/*.json"]
