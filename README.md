@@ -19,14 +19,17 @@ organisations). Packaged as Django static files, so a Django project serves them
 | `cities.json` | the index: `{municipality: {"wards": [years], "parts": [codes]}}` | |
 | `world/countries.geojson` | 242 countries of the world of today (states, dependencies, disputed areas) | `code` (Wikidata Q-id, Q213), `name` (English), `iso` (ISO 3166-1 alpha-3 or null) |
 | `world/points.geojson` | the countries smaller than 5 000 km² (Malta, Luxembourg, Vatican…) once more as a point, to be drawn as a circle | as `countries.geojson` |
-| `world/former.json` | by hand: a former state -> the countries of today on its territory, `{Q-id: {"name", "territory": [Q-ids], "partial", "source"}}` | |
+| `world/territories.json` | by hand: a state not on the map -> the countries of today on its territory, `{Q-id: {"name", "territory": [Q-ids], "partial", "source"}}` | |
 
 The wards change between the elections (renumbered, split), so a ward has the years of the sets of boundaries it is
 in: a map of an election uses the set of its year.
 
-The map of the world has the boundaries of today. A former state (Czechoslovakia, the Soviet Union, Yugoslavia…) is
-drawn as the countries of today on its territory (`former.json`); `partial` is true when it was only a part of them
-(East Germany of Germany), so a map can tell it apart.
+The map of the world has the boundaries of today. A state not on it is drawn as the countries of today on its territory
+(`territories.json`): a former state (Czechoslovakia, the Soviet Union, Yugoslavia…), a regime that Wikidata keeps as
+an item of its own and makes the member of an organisation (the Polish People's Republic, the Czechoslovak Socialist
+Republic), a realm of more countries (the Kingdom of Denmark: Denmark, Greenland, the Faroe Islands). `partial` is true
+when it was only a part of them (East Germany of Germany), so a map can tell it apart. A regime of Wikidata whose
+country (P17) is on the map needs no line.
 
 ## Use in Django
 

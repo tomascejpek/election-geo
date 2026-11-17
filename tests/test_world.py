@@ -76,16 +76,20 @@ class PointsTest(unittest.TestCase):
             self.assertEqual(point['properties'], countries[code]['properties'])
 
 
-class FormerTest(unittest.TestCase):
+class TerritoriesTest(unittest.TestCase):
 
     def test_territories_are_countries_of_the_map(self):
-        former, countries = load('former.json'), features('countries.geojson')
-        self.assertEqual(former['Q33946']['territory'], [CZECHIA, SLOVAKIA])
-        self.assertEqual(len(former['Q15180']['territory']), 15)
-        self.assertTrue(former['Q16957']['partial'])  # East Germany is a part of Germany
-        for code, item in former.items():
+        territories, countries = load('territories.json'), features('countries.geojson')
+        self.assertEqual(territories['Q33946']['territory'], [CZECHIA, SLOVAKIA])  # Czechoslovakia
+        self.assertEqual(territories['Q853348']['territory'], [CZECHIA, SLOVAKIA])  # its regime, ČSSR
+        self.assertEqual(len(territories['Q15180']['territory']), 15)  # the Soviet Union
+        self.assertTrue(territories['Q16957']['partial'])  # East Germany is a part of Germany
+        # a realm of more countries, the member of the UN
+        self.assertEqual(territories['Q756617']['territory'], ['Q35', 'Q223', 'Q4628'])
+        self.assertFalse(territories['Q756617']['partial'])
+        for code, item in territories.items():
             self.assertTrue(QID.match(code), code)
-            self.assertNotIn(code, countries, 'a former state is not a country of today')
+            self.assertNotIn(code, countries, 'a state on the map is its own territory')
             self.assertEqual(set(item), {'name', 'territory', 'partial', 'source'})
             self.assertTrue(item['territory'])
             self.assertLessEqual(set(item['territory']), set(countries), code)

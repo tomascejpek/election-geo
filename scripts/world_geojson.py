@@ -10,8 +10,9 @@ many of the small states.
   Norway: ISO_A3_EH has theirs; Kosovo, Somaliland… have none)
 - points.geojson: the countries too small to be seen on a map of the world (Malta, Luxembourg, Vatican…) once more as
   a point (the place of the label of Natural Earth), to be drawn as a circle
-- former.json is not made here but by hand: a former state -> the countries of today on its territory; the script
-  checks that its countries are in countries.geojson
+- territories.json is not made here but by hand: a state not on the map (a former state, a regime of a country as an
+  item of its own, a realm of more countries) -> the countries of today on its territory; the script checks that its
+  countries are in countries.geojson
 
 Requirements (only of the scripts, not of the package): pyshp, shapely, pyproj, e.g. in a venv of its own:
     python3 -m venv /tmp/geo && /tmp/geo/bin/pip install pyshp shapely pyproj
@@ -95,14 +96,14 @@ def check(shapes: list):
         sys.exit(f'wrong Q-ids: {wrong}, Q-ids twice: {twice}')
 
 
-def check_former(codes: set):
-    """The countries of the territories of the former states are on the map."""
-    with open(os.path.join(OUTPUT, 'former.json'), encoding='utf-8') as file:
-        former = json.load(file)
-    missing = {state: sorted(set(item['territory']) - codes) for state, item in former.items()
+def check_territories(codes: set):
+    """The countries of the territories of the states not on the map are on the map."""
+    with open(os.path.join(OUTPUT, 'territories.json'), encoding='utf-8') as file:
+        territories = json.load(file)
+    missing = {state: sorted(set(item['territory']) - codes) for state, item in territories.items()
                if set(item['territory']) - codes}
     if missing:
-        sys.exit(f'the countries of former.json not on the map: {missing}')
+        sys.exit(f'the countries of territories.json not on the map: {missing}')
 
 
 def write(name: str, features: list):
@@ -120,7 +121,7 @@ def main(countries_zip: str):
     shapes.sort(key=lambda item: int(item[0]['WIKIDATAID'][1:]))
     write('countries', [country(record, geometry) for record, geometry in shapes])
     write('points', [point(record) for record, geometry in shapes if area(geometry) < SMALL_AREA])
-    check_former({record['WIKIDATAID'] for record, _ in shapes})
+    check_territories({record['WIKIDATAID'] for record, _ in shapes})
 
 
 if __name__ == '__main__':
